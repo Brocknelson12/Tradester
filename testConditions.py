@@ -1,5 +1,6 @@
 import sys
 import MongoDBUtils
+import json
 
 
 mongo = MongoDBUtils.MongoUtils()
@@ -8,4 +9,4 @@ mongo.connectToCollectino("dev","bitcoin")
 
 
 values = mongo.getAll()
-print(values)
+print(list(values)[0])
