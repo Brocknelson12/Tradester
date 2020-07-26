@@ -1,11 +1,11 @@
 from pycoingecko import CoinGeckoAPI
 import MongoDBUtils
 cg = CoinGeckoAPI()
-test = cg.get_coin_market_chart_by_id("bitcoin", vs_currency="usd", days= "max")
+# test = cg.get_coin_market_chart_by_id("bitcoin", vs_currency="usd", days= "max")
 
 mongo = MongoDBUtils.MongoUtils()
 mongo.connect()
-mongo.connectToCollectino("dev","btc_hist")
+# mongo.connectToCollectino("dev","btc_hist")
 mongo.collection.insert_one(test)
 
 TICKERS = ['LINK', 'BTC', 'XLM', 'ZRX', 'ZEC', 'XTZ', 'XRP', 'REP', 'OXT', 'OMG' , 'MKR', 'LTC', 'KNC', 'ETH', 'ETC', 'EOS', 'DASH', 'DAI', 'COMP', 'BCH', 'BAT', 'ATOM']
