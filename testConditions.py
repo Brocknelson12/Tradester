@@ -20,7 +20,7 @@ class Learner():
     val_univariate = tf.data.Dataset.from_tensor_slices((x_val_uni, y_val_uni))
     val_univariate = val_univariate.batch(BATCH_SIZE).repeat()
     def __init__(self):
-        self.runUni()
+        self.runUni(self)
 
     
 
