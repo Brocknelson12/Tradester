@@ -11,13 +11,20 @@ import requests
 
 class Learner():
     df: any
-    
+    BATCH_SIZE = 256
+    BUFFER_SIZE = 10000
+
+    train_univariate = tf.data.Dataset.from_tensor_slices((x_train_uni, y_train_uni))
+    train_univariate = train_univariate.cache().shuffle(BUFFER_SIZE).batch(BATCH_SIZE).repeat()
+
+    val_univariate = tf.data.Dataset.from_tensor_slices((x_val_uni, y_val_uni))
+    val_univariate = val_univariate.batch(BATCH_SIZE).repeat()
     def __init__(self):
-        runUni():
+        self.runUni()
 
     
 
-    def runUni():
+    def runUni(self):
         mpl.rcParams['figure.figsize'] = (8, 6)
         mpl.rcParams['axes.grid'] = False
         mongo = MongoDBUtils.MongoUtils()
@@ -72,18 +79,11 @@ class Learner():
 
 
     # Let's now use tf.data to shuffle, batch, and cache the dataset.
-        BATCH_SIZE = 256
-        BUFFER_SIZE = 10000
-
-        train_univariate = tf.data.Dataset.from_tensor_slices((x_train_uni, y_train_uni))
-        train_univariate = train_univariate.cache().shuffle(BUFFER_SIZE).batch(BATCH_SIZE).repeat()
-
-        val_univariate = tf.data.Dataset.from_tensor_slices((x_val_uni, y_val_uni))
-        val_univariate = val_univariate.batch(BATCH_SIZE).repeat()
+    
 
         
     def create_time_steps(length):
-      return list(range(-length, 0))
+      return list(range(length, 0))
     def show_plot(plot_data, delta, title):
         labels = ['History', 'True Future', 'Model Prediction']
         marker = ['.-', 'rx', 'go']
@@ -135,15 +135,15 @@ class Learner():
         plt.title(title)
         for i, x in enumerate(plot_data):
             if i:
-            plt.plot(future, plot_data[i], marker[i], markersize=10,
+                plt.plot(future, plot_data[i], marker[i], markersize=10,
                     label=labels[i])
             else:
-            plt.plot(time_steps, plot_data[i].flatten(), marker[i], label=labels[i])
+                plt.plot(time_steps, plot_data[i].flatten(), marker[i], label=labels[i])
             plt.legend()
             plt.xlim([time_steps[0], (future+5)*2])
             plt.xlabel('Time-Step')
-            return plt
-            show_plot([x_train_uni[0], y_train_uni[0]], 0, 'Sample Example')
+        return plt
+        show_plot([x_train_uni[0], y_train_uni[0]], 0, 'Sample Example')
 # Baseline
 # let's first set a simple baseline. Given an input point, the baseline method looks at all the history and predicts the next point to be the average of the last 20 observations.
 
