@@ -35,7 +35,7 @@ for i in range (0,len(mapping['name'])):
     for entry in data['prices']:
         time = entry[0]
         # new_time = pandas.to_datetime(time)
-        coin_times.append(entry[0])
+        coin_times.append(str(datetime.datetime.fromtimestamp(int(time)/1000).date()))
         coin_prices.append(entry[1])
     # print(df)
     if 'timestamps' in df: 
