@@ -39,7 +39,7 @@ for i in range (0,len(mapping['name'])):
         coin_prices.append(entry[1])
     # print(df)
     if 'timestamps' in df: 
-        df = df.merge(pandas.DataFrame({"prices_"+mapping['name'][i]:coin_prices, "timestamps": coin_times}), on="timestamps",how="outer")
+        df = df.merge(pandas.DataFrame({"prices_"+mapping['name'][i]:coin_prices, "timestamps": coin_times}), on="timestamps",how="left")
     else:
         df = pandas.DataFrame({"prices":coin_prices, "timestamps": coin_times})
         print(df)
