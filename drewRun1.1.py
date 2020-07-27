@@ -35,15 +35,22 @@ for i in range (0,len(mapping['name'])):
     for entry in data['prices']:
         time = entry[0]
         # new_time = pandas.to_datetime(time)
-        coin_times.append(str(datetime.datetime.fromtimestamp(int(time)/1000).date()))
+        # coin_times.append(str(datetime.datetime.fromtimestamp(int(time)/1000).date()))
+        coin_times.append(entry[0])
         coin_prices.append(entry[1])
     # print(df)
     if 'timestamps' in df: 
         df = df.merge(pandas.DataFrame({"prices_"+mapping['name'][i]:coin_prices, "timestamps": coin_times}), on="timestamps",how="left")
     else:
-        df = pandas.DataFrame({"prices":coin_prices, "timestamps": coin_times})
+        df = pandas.DataFrame({"timestamps": coin_times, "prices_"+mapping['name'][i]:coin_prices})
         print(df)
 
 
 #  df.to_csv()   
+stamps = []
+for time in df['timestamps']:
+    new_time = str(datetime.datetime.fromtimestamp(int(time)/1000).date())
+    stamps.append(new_time)
+df['timestamps'] = stamps
+# df['timestamps']
 df.to_csv('coin_data.csv', index=False)
