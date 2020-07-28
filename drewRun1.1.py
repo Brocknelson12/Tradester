@@ -11,46 +11,56 @@ mapping = {
             }
 new_mapping = {}
 
-all_coins = pandas.DataFrame()
-coin_data = pandas.DataFrame()
-timestamps = pandas.date_range(start='2013-04-27',end= str(datetime.datetime.today())[:10])
-coin_data['timestamps'] = timestamps
-all_coins['timestamps'] = timestamps
+# all_coins = pandas.DataFrame()
+# coin_data = pandas.DataFrame()
+# timestamps = pandas.date_range(start='2013-04-27',end= str(datetime.datetime.today())[:10])
+# coin_data['timestamps'] = timestamps
+dates = []
+date_dummy = datetime.datetime(2013,4,27)
+today = str(datetime.datetime.today().date())
+while date_dummy < datetime.datetime(int(today[:4]), int(today[5:7]), int(today[8:10])):
+    date_dummy = date_dummy + datetime.timedelta(days=1)
+    dates.append(date_dummy)
+dates_df = pandas.DataFrame({'date': dates})
+
 days = 'max'
 x=0
 # print(str(datetime.datetime.today())[:10])
 
-coins = []
-df = pandas.DataFrame()
 #looping through all coins
 for i in range (0,len(mapping['name'])):
     coin_tkr = mapping['ticker'][i]
     data = cg.get_coin_market_chart_by_id(mapping['name'][i], vs_currency='usd', days= days)
     
         # print(data)
-    coin_times = []
+    coin_dates = []
     coin_prices = []
+    coin_vols = []
+    coin_caps = []
     #price is only variable we are using
     #need to get a list of pandas timestamps to join list on
     for entry in data['prices']:
-        time = entry[0]
-        # new_time = pandas.to_datetime(time)
-        # coin_times.append(str(datetime.datetime.fromtimestamp(int(time)/1000).date()))
-        coin_times.append(entry[0])
+        dt = str(datetime.datetime.fromtimestamp(int(entry[0])/1000).date())
+        new_date = datetime.datetime(int(dt[:4]), int(dt[5:7]), int(dt[8:10]))
+        coin_dates.append(new_date)
         coin_prices.append(entry[1])
-    # print(df)
-    if 'timestamps' in df: 
-        df = df.merge(pandas.DataFrame({"timestamps": coin_times: "prices_"+mapping['name'][i]:coin_prices, }), on="timestamps",how="left")
-    else:
-        df = pandas.DataFrame({"timestamps": coin_times, "prices_"+mapping['name'][i]:coin_prices})
-        print(df)
+    for vol in data['total_volumes']:
+        coin_vols.append(vol[1])
+    for cap in data['market_caps']:
+        coin_caps.append(cap[1])
+    coin_data = pandas.DataFrame({'date': coin_dates, mapping['name'][i]+'_price': coin_prices, mapping['name'][i]+'_total_volume': coin_vols, mapping['name'][i]+'_market_cap': coin_caps})
+    temp_df = dates_df.merge(coin_data, on= 'date', how= 'outer')
+    dates_df.merge(temp_df, on= 'date', how= 'outer')
+# print(dates_df)
+# df = df.merge(temp_df)
+# out_df = pandas.DataFrame({'dates': coin_dates, "prices_"+mapping['name'][i]:coin_prices})
+dates_df.to_csv('coin_data.csv', index=False)
 
 
 #  df.to_csv()   
-stamps = []
-for time in df['timestamps']:
-    new_time = str(datetime.datetime.fromtimestamp(int(time)/1000).date())
-    stamps.append(new_time)
-df['timestamps'] = stamps
+# stamps = []
+# for time in df['timestamps']:
+#     new_time = str(datetime.datetime.fromtimestamp(int(time)/1000).date())
+#     stamps.append(new_time)
+# df['timestamps'] = stamps
 # df['timestamps']
-df.to_csv('coin_data.csv', index=False)
