@@ -41,6 +41,7 @@ for i in range (0,len(mapping['name'])):
 
     coin_dates = []
     coin_prices = []
+    price_pct = []
     coin_vols = []
     coin_caps = []
     for idx, val in enumerate(coin_data['date']):
@@ -49,7 +50,11 @@ for i in range (0,len(mapping['name'])):
             coin_prices.append(coin_data['prices'][idx])
             coin_vols.append(coin_data['total_volume'][idx])
             coin_caps.append(coin_data['market_cap'][idx])
-    coin_data = pandas.DataFrame({'date': pandas.to_datetime(coin_dates), mapping['name'][i]+'_price': coin_prices, mapping['name'][i]+'_total_volume': coin_vols, mapping['name'][i]+'_market_cap':coin_caps })
+            if idx == 0:
+                price_pct.append(0)
+            else:
+                price_pct.append(float((coin_data['prices'][idx]-coin_data['prices'][idx-1])/coin_data['prices'][idx]))
+    coin_data = pandas.DataFrame({'date': pandas.to_datetime(coin_dates), mapping['name'][i]+'_price': coin_prices, mapping['name'][i]+'_price_pct':price_pct, mapping['name'][i]+'_total_volume': coin_vols, mapping['name'][i]+'_market_cap':coin_caps })
     dfs.append(coin_data)
 
 
