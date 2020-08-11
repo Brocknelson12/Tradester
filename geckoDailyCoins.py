@@ -34,21 +34,4 @@ with open('geckoCoinsList.csv', 'w') as outFile:
     writer = csv.writer(outFile)
     writer.writerow(current)
 
-# if len(results) > 1 or len(near) > 4:
-
-TWILIO_ACCOUNT_SID = 'AC9dbe97cd3e577cc671e8237dbd915f86'
-TWILIO_AUTH_TOKEN = '0265f8d1c3bffaa4312e577615c9924f'
-
-client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-
-drewPhone = '2145923739'
-# brockPhone = '9725671997'
-botPhone = '2028755446'
-# patrickPhone = '2142980418'
-# carPhone = '9188992204'
-
-body = str(new)
-client.messages.create(from_=botPhone, to=drewPhone, body=body)
-# client.messages.create(from_=botPhone, to=brockPhone, body=body)
-# client.messages.create(from_=botPhone, to=patrickPhone, body=body)
-# client.messages.create(from_=botPhone, to=carPhone, body=body)
+print(new)
