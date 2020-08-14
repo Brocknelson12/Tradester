@@ -1,7 +1,6 @@
 import time, datetime
 from pycoingecko import CoinGeckoAPI
 cg = CoinGeckoAPI()
-import plotly.graph_objects as go
 
 while True:
     data = cg.get_price('bitgear', vs_currencies='usd')
