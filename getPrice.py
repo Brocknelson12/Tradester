@@ -15,16 +15,20 @@ cg = CoinGeckoAPI()
     
 '''
 
-data = cg.get_price('bitgear', vs_currencies='usd')
+data1 = cg.get_price('bitgear', vs_currencies='usd')
+data2 = cg.get_price('keysians-network', vs_currencies='usd')
 # print(data)
 
-price_gear = float(data['bitgear']['usd'])
-price_usd = 568.441*price_gear
+price_gear = float(data1['bitgear']['usd'])
+price_usd1 = 568.441*price_gear
 
-TWILIO_ACCOUNT_SID = 'AC9dbe97cd3e577cc671e8237dbd915f86'
-TWILIO_AUTH_TOKEN = '9c990c745a6954c756138ec8f49727ce'
+price_ken = float(data2['keysians-network']['usd'])
+price_usd2 = 5.22413*price_ken
 
-client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+TWILIO_ACCOUNT_SID = ''
+TWILIO_AUTH_TOKEN = ''
+
+# client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 drewPhone = '2145923739'
 # brockPhone = '9725671997'
@@ -32,8 +36,8 @@ botPhone = '2028755446'
 # patrickPhone = '2142980418'
 # carPhone = '9188992204'
 
-body = '$'+str(price_usd)[:6]
-
+body = ['GEAR $'+str(price_usd1)[:6], 'KEN $'+str(price_usd2)[:6]]
+print(body)
 # client.messages.create(from_=botPhone, to=drewPhone, body=body)
 # client.messages.create(from_=botPhone, to=brockPhone, body=body)
 # client.messages.create(from_=botPhone, to=patrickPhone, body=body)
