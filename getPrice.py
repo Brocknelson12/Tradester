@@ -14,16 +14,23 @@ cg = CoinGeckoAPI()
         run a max price range for the coins, put $100 on each one and see what your balance would YTD.
     
 '''
+btc_price = float(cg.get_price('bitcoin', vs_currencies='usd')['bitcoin']['usd'])
+btc_wallet_coinbase = 0.04883647*btc_price
+btc_wallet_csahapp = 0.00846508*btc_price
+btc_wallet = str('BTC $'+str(btc_wallet_coinbase+btc_wallet_csahapp)[:6])
 
-data1 = cg.get_price('lgcy-network', vs_currencies='usd')
-# data2 = cg.get_price('keysians-network', vs_currencies='usd')
-# print(data1)
+link_price = float(cg.get_price('chainlink', vs_currencies='usd')['chainlink']['usd'])
+link_wallet = str('LINK $'+str(11.34571318*link_price)[:6])
 
-price_coin1 = float(data1['lgcy-network']['usd'])
-price_usd1 = 257927.71025115204*price_coin1
 
-# price_coin2 = float(data2['keysians-network']['usd'])
-# price_usd2 = 5.22413*price_coin2
+alt_wallet = []
+dot_price = float(cg.get_price('polkadot', vs_currencies='usd')['polkadot']['usd'])
+dot_wallet = str('DOT $'+str(16.00395043*dot_price)[:6])
+om_price = float(cg.get_price('mantra-dao', vs_currencies='usd')['mantra-dao']['usd'])
+om_wallet = str('OM $'+str(125.335*om_price)[:6])
+stake_price = float(cg.get_price('xdai-stake', vs_currencies='usd')['xdai-stake']['usd'])
+stake_wallet = str('STAKE $'+str(1.096*stake_price)[:6])
+alt_wallet = 'ALTs $'+str(float(16.00395043*dot_price)+float(125.335*om_price)+float(1.096*stake_price))[:6]
 
 TWILIO_ACCOUNT_SID = ''
 TWILIO_AUTH_TOKEN = ''
@@ -36,8 +43,8 @@ botPhone = '2028755446'
 # patrickPhone = '2142980418'
 # carPhone = '9188992204'
 
-body = ['LGCY $'+str(price_usd1)[:6]]
-# print(body)
+body = str(btc_wallet+'\n'+link_wallet+'\n'+alt_wallet+'\n'+dot_wallet+'\n'+om_wallet+'\n'+stake_wallet)
+print(body)
 # client.messages.create(from_=botPhone, to=drewPhone, body=body)
 # client.messages.create(from_=botPhone, to=brockPhone, body=body)
 # client.messages.create(from_=botPhone, to=patrickPhone, body=body)
