@@ -1,4 +1,4 @@
-import csv, twilio
+import csv, twilio, requests
 from pycoingecko import CoinGeckoAPI
 from twilio.rest import Client
 cg = CoinGeckoAPI()
@@ -15,23 +15,12 @@ cg = CoinGeckoAPI()
     
 '''
 btc_price = float(cg.get_price('bitcoin', vs_currencies='usd')['bitcoin']['usd'])
-btc_wallet_coinbase = 0.04883647*btc_price
-btc_wallet_csahapp = 0.00846508*btc_price
-btc_wallet = str('BTC $'+str(btc_wallet_coinbase+btc_wallet_csahapp)[:6])
-
-link_price = float(cg.get_price('chainlink', vs_currencies='usd')['chainlink']['usd'])
-link_wallet = str('LINK $'+str(11.34571318*link_price)[:6])
-
-
-alt_wallet = []
-dot_price = float(cg.get_price('polkadot', vs_currencies='usd')['polkadot']['usd'])
-dot_wallet = str('DOT $'+str(16.00395043*dot_price)[:6])
-om_price = float(cg.get_price('mantra-dao', vs_currencies='usd')['mantra-dao']['usd'])
-om_wallet = str('OM $'+str(125.335*om_price)[:6])
-stake_price = float(cg.get_price('xdai-stake', vs_currencies='usd')['xdai-stake']['usd'])
-stake_wallet = str('STAKE $'+str(1.096*stake_price)[:6])
-alt_wallet = 'ALTs $'+str(float(16.00395043*dot_price)+float(125.335*om_price)+float(1.096*stake_price))[:6]
-
+trending = requests.get('https://api.coingecko.com/api/v3/search/trending').json()['coins']
+# print(trending)
+trends = []
+for i in trending:
+    trends.append(str(i['item']['symbol']+'-'+str(i['item']['market_cap_rank'])))
+print(trends)
 TWILIO_ACCOUNT_SID = ''
 TWILIO_AUTH_TOKEN = ''
 
@@ -43,7 +32,7 @@ botPhone = '2028755446'
 # patrickPhone = '2142980418'
 # carPhone = '9188992204'
 
-body = str(btc_wallet+'\n'+link_wallet+'\n'+alt_wallet+'\n'+dot_wallet+'\n'+om_wallet+'\n'+stake_wallet)
+body = str(trends)
 print(body)
 # client.messages.create(from_=botPhone, to=drewPhone, body=body)
 # client.messages.create(from_=botPhone, to=brockPhone, body=body)
